@@ -1,13 +1,19 @@
+//Global sheet positions
+const timestampCol = 'B'
+const workerNameCol = 'C'
+
 // Worker sheet positions
 const familyStateColWorkerSheet = 'P'
 const coursesStateColWorkerSheet = 'W'
 const jobStateColWorkerSheet = 'X'
+const emailColWorkerSheet = 'F'
 
 // Employment sheet positions
-const contactStateColEmploymentSheet = 'F'
-const schoolStateColEmploymentSheet = 'I'
-const coursesStateColEmploymentSheet = 'P'
-const jobStateColEmploymentSheet = 'Q'
+//const contactStateColEmploymentSheet = 'F'
+const schoolStateColEmploymentSheet = 'J'
+const coursesStateColEmploymentSheet = 'Q'
+const jobStateColEmploymentSheet = 'R'
+const emailColEmploymentSheet = 'I'
 
 // Markers, if someone will sent empty field (one of these below) 
 // js script from wordpress will send to google sheet raw markers, 
@@ -16,32 +22,32 @@ const familyStateMarker = '{{family-state}}'
 const coursesStateMarker = '{{courses-state}}'
 const jobStateMarker = '{{job-state}}'
 const schoolStateMarker = '{{school-state}}'
-const contactStateMarker = '{{contact-state}}'
 
-// delimeters which are used in output from wp redge.com forms
+// delimeters which are used in output from wp forms
 const newLineDelimeter = '{||}'
 const delimeter = '|||'
 
 const employmentMarkers = {
   'C': '{{worker-name}}',
   'D': '{{worker-born-date}}',
-  'E': '{{worker-pesel}}',
-  'F': '{{contact-data-address}}',
-  'G': '{{contact-data-phone}}',
-  'H': '{{contact-data-email}}',
-  'I': '{{study-state-education}}',
-  'J': '{{study-state-name}}',
-  'K': '{{study-state-start-date}}',
-  'L': '{{study-state-end-date}}',
-  'M': '{{study-state-degree}}',
-  'N': '{{study-state-count}}',
-  'O': '{{study-state-speciality}}',
-  'P': '{{courses-state}}',
-  'Q': '{{job-state-company-name}}',
-  'R': '{{job-state-position}}',
-  'S': '{{job-state-place}}',
-  'T': '{{job-state-start-date}}',
-  'U': '{{job-state-end-date}}',
+  'E': '{{worker-born-place}}',
+  'F': '{{worker-pesel}}',
+  'G': '{{contact-data-address}}',
+  'H': '{{contact-data-phone}}',
+  'I': '{{contact-data-email}}',
+  'J': '{{study-state-education}}',
+  'K': '{{study-state-name}}',
+  'L': '{{study-state-start-date}}',
+  'M': '{{study-state-end-date}}',
+  'N': '{{study-state-degree}}',
+  'O': '{{study-state-count}}',
+  'P': '{{study-state-speciality}}',
+  'Q': '{{courses-state}}',
+  'R': '{{job-state-company-name}}',
+  'S': '{{job-state-position}}',
+  'T': '{{job-state-place}}',
+  'U': '{{job-state-start-date}}',
+  'V': '{{job-state-end-date}}',
 }
 const workerMarkers = {
   'C': '{{worker-name}}',
