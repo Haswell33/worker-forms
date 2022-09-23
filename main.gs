@@ -6,6 +6,7 @@ function arrangeFormData(e) { // start by event
   let markers // markers map, where map and marker from gDoc file are mapped to replace
   let docTemplate // template doc file
   let repository // gDrive folder
+  let workerEmail
   switch(sheetName) {
     case getWorkerSheet().getName():
       assertTable.push(insertValue(sheet, sheet.getRange(familyStateColWorkerSheet + lastRow), familyStateMarker))
@@ -14,24 +15,28 @@ function arrangeFormData(e) { // start by event
       markers = workerMarkers
       docTemplate = getWorkerDocTemplate()
       repository = getWorkerRepository()
+      workerEmail = sheet.getRange(emailColWorkerSheet + lastRow).getValue()
       break
     case getEmploymentSheet().getName():
-      assertTable.push(insertValue(sheet, sheet.getRange(contactStateColEmploymentSheet + lastRow), contactStateMarker))
       assertTable.push(insertValue(sheet, sheet.getRange(schoolStateColEmploymentSheet + lastRow), schoolStateMarker))
       assertTable.push(insertValue(sheet, sheet.getRange(coursesStateColEmploymentSheet + lastRow), coursesStateMarker))
       assertTable.push(insertValue(sheet, sheet.getRange(jobStateColEmploymentSheet + lastRow), jobStateMarker))
       markers = employmentMarkers
       docTemplate = getEmploymentDocTemplate()
       repository = getEmploymentRepository()
+      workerEmail = sheet.getRange(emailColEmploymentSheet + lastRow).getValue()
       break
     default:
       console.warn('"' + sheetName + '" has not assigned any scripts')
       break
   }
   if (!assertTable.includes(false) && assertTable.length > 0) { // if any data has been changed
-    sheet.getRange('B' + lastRow).setValue(getToday()) // set timestamp
-    createDocument(lastRow, sheet, markers, docTemplate, repository) // generate paper version of form
+    sheet.getRange(timestampCol + lastRow).setValue(getToday()) // set timestamp
+    let doc = createDocument(lastRow, sheet, markers, docTemplate, repository) // generate paper version of form
+    sendMail(workerEmail, 'Kwestionariusz', DriveApp.getFileById(doc.getId()), sheet, lastRow)
   }
+  else 
+    console.warn('document not generated')
 }
 
 function insertValue(sheet, range, marker) {
@@ -67,7 +72,7 @@ function insertValue(sheet, range, marker) {
 function createDocument(row, sheet, markers, docTemplate, repository) {
   let urlRange = sheet.getRange(getColumnToLetter(sheet.getLastColumn()) + row)
   urlRange.setValue('Tworzenie dokumentu...')
-  let docTitle = sheet.getRange('C' + row).getValue() + ' (' + sheet.getName() + ')'
+  let docTitle = sheet.getRange(workerNameCol + row).getValue() + ' (' + sheet.getName() + ')'
   const docNew = docTemplate.makeCopy(docTitle, repository)
   var doc = DocumentApp.openById(docNew.getId())
   var body = doc.getBody()
@@ -80,10 +85,30 @@ function createDocument(row, sheet, markers, docTemplate, repository) {
   }
   doc.saveAndClose()
   addUrlToSheet(doc.getUrl(), urlRange, docTitle)
+  return doc
 }
 
 function addUrlToSheet(url, urlRange, title){
   var urlText = SpreadsheetApp.newRichTextValue().setText(title).setLinkUrl(url).build()
   urlRange.setRichTextValue(urlText)
   console.info('document saved in ' + url)
+}
+
+function sendMail(emailRecipent, subject, file, sheet, row) {
+  try {
+    MailApp.sendEmail(emailRecipent, sheet.getName(), '', {
+      name: subject,
+      noReply: true,
+      attachments: [file.getAs(MimeType.PDF)]
+    })
+    console.info('document sent to ' + emailRecipent)
+  }
+  catch(error) {
+    if (error.message.startsWith('Invalid email')) {
+      console.error('incorrect email, note added to sheet')
+      sheet.getRange(workerNameCol + row).setNote('Mail z kwestionariuszem nie został wysłany, wprowadzony e-mail był nieprawidłowy')
+    }
+    else
+      console.error(error.name + ': ' + error.message)
+  }
 }
