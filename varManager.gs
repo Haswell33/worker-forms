@@ -86,24 +86,3 @@ const workerMarkers = {
   'AJ': '{{emergency-person-phone}}',
   'AK': '{{emergency-person-email}}',
 }
-
-const styleTitle = {
-  [DocumentApp.Attribute.HORIZONTAL_ALIGNMENT]: DocumentApp.HorizontalAlignment.LEFT,
-  [DocumentApp.Attribute.FONT_SIZE]: 11,
-  [DocumentApp.Attribute.BOLD]: true,
-  [DocumentApp.Attribute.SPACING_AFTER]: 10,
-  [DocumentApp.Attribute.SPACING_BEFORE]: 10}
-const styleParagraph = {
-  [DocumentApp.Attribute.HORIZONTAL_ALIGNMENT]: DocumentApp.HorizontalAlignment.LEFT,
-  [DocumentApp.Attribute.BOLD]: false,
-  [DocumentApp.Attribute.FONT_SIZE]: 8}
-const signatureParagraph = {
-  [DocumentApp.Attribute.HORIZONTAL_ALIGNMENT]: DocumentApp.HorizontalAlignment.RIGHT,
-  [DocumentApp.Attribute.BOLD]: false,
-  [DocumentApp.Attribute.SPACING_BEFORE]: 30,
-  [DocumentApp.Attribute.FONT_SIZE]: 8}
-const subTextSignatureParagraph = {
-  [DocumentApp.Attribute.HORIZONTAL_ALIGNMENT]: DocumentApp.HorizontalAlignment.RIGHT,
-  [DocumentApp.Attribute.BOLD]: false,
-  [DocumentApp.Attribute.SPACING_BEFORE]: 0,
-  [DocumentApp.Attribute.FONT_SIZE]: 7}
